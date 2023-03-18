@@ -22,8 +22,8 @@ Now, you can freely use the functions in the library in the form of `instance.Fu
 Please refer to the example file.
 
 ## Supported functions
-* Split phonemes in Hangul (hi > ah-na-ng)
+* Split phonemes in Hangul (안녕 > ㅇㅏㄴㄴㅕㅇ)
 
 ## Support and contributions
-* If you have any problems during use, please register a GitHub issue or email contact@pnal.dev로.
+* If you have any problems during use, please register a GitHub issue or email to contact@pnal.dev
 * GitHub contributions are always welcome. Please feel free to contribute features you would like to see added and enhanced.
