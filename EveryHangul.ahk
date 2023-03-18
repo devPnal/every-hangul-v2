@@ -1,11 +1,15 @@
-﻿/* #############################################################
+﻿/*
+MIT License, Copyright (C) 2022 프날(Pnal, contact@pnal.dev)
+You should have received a copy of the MIT License along with this library.
+*/
+
+/* #############################################################
  * Every Hangul v2.0.0
  *
  * Author: 프날(Pnal) - https://pnal.dev (blog: https://blog.pnal.dev)
  * Contact: Contact@pnal.dev
- *
- * License: MIT (See LICENSE file on GitHub)
  * Description: A library for handling with the Korean alphabet, 'Hangul'.
+ * License: MIT License (see LICENSE file)
  *
  * If there are any awkward English sentences here, please contribute or contact me.
  * My native language is Korean so English is limited.

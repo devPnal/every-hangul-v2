@@ -1,7 +1,9 @@
+[한국어](/README/ko.md) | [English](/README/en.md)
+
 # 모두의 한글 v2
 📚 한글 처리를 위한 오토핫키 라이브러리.
 
-[MIT 라이선스](/LICENSE) 하에 자유롭게 쓸 수 있습니다.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 사용 방법
 아래와 같이 라이브러리 파일을 스크립트에 포함시킵니다.

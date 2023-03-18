@@ -1,7 +1,9 @@
+[한국어](/README/ko.md) | [English](/README/en.md)
+
 # Every Hangul v2
 📚 AutoHotkey library for processing the Korean alphabet, "Hangul".
 
-You can use it freely under the [MIT License](/LICENSE).
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## How to use
 Include the library file in your script like below .
