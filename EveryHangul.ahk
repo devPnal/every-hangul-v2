@@ -92,6 +92,82 @@ class EveryHangul
 	}
 
 	/* =========================
+	 * FixParticle(_inputString)
+	 * Fix Korean prepositional particles automatically (Example: 교육를 > 교육을)
+	 *
+	 * @Parameter
+	 * _inputString: The string that has wrong particles. The particle must be at the end of the input.
+	 *
+	 * @Return value
+	 * result: Fixed string
+	 *
+	 * Note: If it given a string with no prepositional particle, it may be unwantedly overmodified. (Example: 인사고과 > 인사고와)
+	 * ==========================
+	 */
+	FixParticle(_inputString)
+	{
+		trimedLength := 1
+		if (SubStr(_inputString, -2) = "이여" || SubStr(_inputString, -2) = "으로" || SubStr(_inputString, -2) = "라고")
+			trimedLength := 2
+		if (SubStr(_inputString, -3) = "이라고")
+			trimedLength := 3
+		final := this.dev.GetCharNum(SubStr(_inputString, -trimedLength - 1, -1)).finalChar
+		Switch SubStr(_inputString, -1)
+		{
+			Case "은", "는":
+				particle := final = 0 ? "는" : "은"
+			Case "을", "를":
+				particle := final = 0 ? "를" : "을"
+			Case "이", "가":
+				particle := final = 0 ? "가" : "이"
+			Case "과", "와":
+				particle := final = 0 ? "와" : "과"
+			Case "아", "야":
+				particle := final = 0 ? "야" : "아"
+			Case "여":
+		   		particle := final = 0 ? "여" : "이여"
+			Case "로":
+				particle := final = 0 || final = 8 ? "로" : "으로"
+			Case "고":
+		   		particle := final = 0 ? "라고" : "이라고"
+			Default:
+				return _inputString
+		}
+		return SubStr(_inputString, 1, -trimedLength) particle
+	}
+
+	/* =========================
+	 * FixParticleAll(_inputString)
+	 * Fix All Korean prepositional particles in the given string (Example: 누구나 접근할 수 있은 웹로 > 누구나 접근할 수 있는 웹으로)
+	 *
+	 * @Parameter
+	 * _inputString: The string that has wrong particles.
+	 *
+	 * @Return value
+	 * result: Fixed string
+	 *
+	 * Note: Some cases, it may be unwantedly overmodified.
+	 * If you want fix partially, you need to add '\' in front of where you don't want to fix it.
+	 * You can use literal '\' if you use '\\'
+	 * Example: 있는 것 > 있은 것 (x) => In this case, '는' is not particles. It's a kind of tubular endings. So we don't need to fix it.
+	 *			있\는 것 > 있는 것 (o)
+	 * ==========================
+	 */
+	FixParticleAll(_inputString)
+	{
+		Loop Parse, _inputString, A_Space
+		{
+			if (InStr(A_LoopField, "\") && !InStr(A_LoopField, "\\") )
+			{
+				result .= StrReplace(A_LoopField, "\") " "
+				continue
+			}
+			result .= this.FixParticle(A_LoopField) " "
+		}
+		return StrReplace(result, "\\", "\")
+	}
+
+	/* =========================
 	 * [For development]
 	 * Functions below this are used for other functions in this library and may be meaningless in actual use.
 	 * For example, if you use the GetCharNum() function to get the index of Hangul character, this does not return the actual index of Unicode.
