@@ -23,6 +23,7 @@ instance := EveryHangul()
 
 ## 지원 기능
 * 한글의 음소 분리 (안녕 > ㅇㅏㄴㄴㅕㅇ)
+* 한글을 영타로 변환 (안녕 > dkssud)
 
 ## 지원 및 기여
 * 사용 중 문제가 있을 경우 GitHub 이슈 등록을 하거나, 이메일 contact@pnal.dev로 연락 주세요.

@@ -23,6 +23,7 @@ Please refer to the example file.
 
 ## Supported functions
 * Split phonemes in Hangul (안녕 > ㅇㅏㄴㄴㅕㅇ)
+* Convert Korean to English keys (안녕 > dkssud)
 
 ## Support and contributions
 * If you have any problems during use, please register a GitHub issue or email to contact@pnal.dev
