@@ -24,6 +24,8 @@ Please refer to the example file.
 ## Supported functions
 * Split phonemes in Hangul (안녕 > ㅇㅏㄴㄴㅕㅇ)
 * Convert Korean to English keys (안녕 > dkssud)
+* Fix Korean particles (청춘를 > 청춘을)
+* Fix all Korean particles in sentence (철수은 영희을 좋아한다. > 철수는 영희를 좋아한다.)
 
 ## Support and contributions
 * If you have any problems during use, please register a GitHub issue or email to contact@pnal.dev
