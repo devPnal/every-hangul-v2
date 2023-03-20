@@ -242,6 +242,19 @@ class EveryHangul
 		return StrReplace(result, "\\", "\")
 	}
 
+	/* =========================
+	 * Combine(_first, _middle, _final)
+	 * Combine consonants and a vowel in a character. (Example: ㅎ + ㅢ + ㄴ = 흰)
+	 *
+	 * @Parameter
+	 * _first: The first consonants what you want to combine.
+	 * _middle: The vowel what you want to combine.
+	 * _final: The final consonants what you want to combine. It can be omit. (Example: ㅅ+ㅓ+(omitted) = 서)
+	 *
+	 * @Return value
+	 * result: Combined string (just one combined character)
+	 * ==========================
+	 */
 	Combine(_first, _middle, _final := "")
 	{
 		firstIndex := middleIndex := 1
@@ -262,6 +275,7 @@ class EveryHangul
 		result := Ord(result) >= Ord("가") && Ord(result) <= Ord("힣") ? result : _first _middle _final
 		return result
 	}
+
 	/* =========================
 	 * [For development]
 	 * Functions below this are used for other functions in this library and may be meaningless in actual use.
