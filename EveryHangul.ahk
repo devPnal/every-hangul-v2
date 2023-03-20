@@ -252,7 +252,7 @@ class EveryHangul
 	 * _final: The final consonants what you want to combine. It can be omit. (Example: ㅅ+ㅓ+(omitted) = 서)
 	 *
 	 * @Return value
-	 * result: Combined string (just one combined character)
+	 * result: Combinned string (just one combinned character)
 	 * ==========================
 	 */
 	Combine(_first, _middle, _final := "")
