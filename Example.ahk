@@ -1,8 +1,41 @@
-﻿#Include EveryHangul.ahk
+﻿/*
+MIT License, Copyright (C) 2022 프날(Pnal, contact@pnal.dev)
+You should have received a copy of the MIT License along with this library.
+*/
 
-hangul := EveryHangul()
-MsgBox(hangul.Split("잃어버린 것에 대하여", 0))
-MsgBox(hangul.Split("잃어버린 것에 대하여", 1))
-MsgBox(hangul.EngKey("끓다 / 붇다 / 의자 / 안녕 / ㄳ"))
-MsgBox(hangul.FixParticle("평생교육를"))
-MsgBox(hangul.FixParticleAll("철수은 영희이 서울에 있\는 경우 밥를 같이 먹기로 했다."))
+/* #############################################################
+ * Every Hangul v2.0.0
+ *
+ * Author: 프날(Pnal) - https://pnal.dev (blog: https://blog.pnal.dev)
+ * Contact: Contact@pnal.dev
+ * Description: A library for handling with the Korean alphabet, 'Hangul'.
+ * License: MIT License (see LICENSE file)
+ *
+ * If there are any awkward English sentences here, please contribute or contact me.
+ * My native language is Korean so English is limited.
+ * #############################################################
+ */
+
+#Include EveryHangul.ahk
+
+hangul := EveryHangul() ;Create Instance
+
+;Split() splits all consonants and vowels.
+MsgBox(hangul.Split("헌법 제31조"))
+
+;EngKey() converts Korean to English keyboard layout. (두벌식 > QWERTY)
+MsgBox(hangul.EngKey("① 모든 국민은 능력에 따라 균등하게 교육을 받을 권리를 가진다. "))
+
+;KorKey() converts English to Korean keyboard layout. (QWERTY > 두벌식)
+MsgBox(hangul.KorKey("② ahems rnralsdms rm qhghgksms wksudprp wjrdjeh chemdrydbrrhk qjqfbfdl wjdgksms rydbrdmf qkerp gkf dmlanfmf wlsek."))
+
+;FixParticle() fixes a particles in a last word. (은>는, 로>으로)
+MsgBox(hangul.FixParticle("③ 의무교육는") hangul.FixParticle(" 무상로") " 한다.")
+
+;FixParticleAll() fixes all particles in a sentense. (는>은, 가>이)
+MsgBox(hangul.FixParticleAll("④ 교육의 자주성ㆍ전문성ㆍ정치적 중립성 및 대학의 자율성는 법률가 정하는 바에 의하여 보장된다."))
+
+;Combine() makes perfect Korean character. (ㅍ+ㅕ+ㅇ = 평, ㅅ+ㅐ+ㅇ = 생, ㄱ+ㅛ = 교, ㅇ+ㅠ+ㄱ = 육)
+Msgbox("⑤ 국가는 " hangul.Combine("ㅍ", "ㅕ", "ㅇ") hangul.Combine("ㅅ", "ㅐ", "ㅇ") hangul.Combine("ㄱ", "ㅛ") hangul.Combine("ㅇ", "ㅠ", "ㄱ") "을 진흥하여야 한다.")
+
+;More details can be found in the library file (EveryHangul.ahk). There are detailed descriptions of the functions.
