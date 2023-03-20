@@ -242,6 +242,26 @@ class EveryHangul
 		return StrReplace(result, "\\", "\")
 	}
 
+	Combine(_first, _middle, _final := "")
+	{
+		firstIndex := middleIndex := 1
+		finalIndex := 0
+
+		Loop this.dev.firstArr.Length
+			if (_first = this.dev.firstArr[A_Index])
+				firstIndex := A_index
+		Loop this.dev.middleArr.Length
+			if (_middle = this.dev.middleArr[A_Index])
+				middleIndex := A_index
+		if (_final != "")
+			Loop this.dev.finalArr.Length
+				if (_final = this.dev.finalArr[A_Index])
+					finalIndex := A_index
+
+		result := Chr(0xAC00 + (((firstIndex - 1) * 21 + (middleIndex-1)) * 28 + finalIndex))
+		result := Ord(result) >= Ord("가") && Ord(result) <= Ord("힣") ? result : _first _middle _final
+		return result
+	}
 	/* =========================
 	 * [For development]
 	 * Functions below this are used for other functions in this library and may be meaningless in actual use.
