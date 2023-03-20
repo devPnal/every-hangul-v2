@@ -244,7 +244,7 @@ class EveryHangul
 
 	/* =========================
 	 * Combine(_first, _middle, _final)
-	 * Combine consonants and a vowel in a character. (Example: ㅎ + ㅢ + ㄴ = 흰)
+	 * Combine consonants and a vowel to make a character. (Example: ㅎ + ㅢ + ㄴ = 흰)
 	 *
 	 * @Parameter
 	 * _first: The first consonants what you want to combine.
