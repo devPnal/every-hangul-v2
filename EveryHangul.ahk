@@ -94,6 +94,79 @@ class EveryHangul
 	}
 
 	/* =========================
+	 * KorKey(_inputString)
+	 * Convert a string from English to Korean keys (Example: dkssud > 안녕)
+	 *
+	 * @Parameter
+	 * _inputString: A string that converts from a English to Korean keys.
+	 *
+	 * @Return value
+	 * result: Converted string
+	 * ==========================
+	 */
+	KorKey(_inputString)
+	{
+		tempArr := []
+		wordArr := []
+		prevChar := prevPrevChar := result := ""
+		Loop this.dev.doubleMiddleArr.Length
+			_inputString := StrReplace(_inputString, this.dev.engDoubleMiddleArr[A_Index], this.dev.doubleMiddleArr[A_Index])
+		Loop this.dev.middleArr.Length
+			_inputString := StrReplace(_inputString, this.dev.engMiddleArr[A_Index], this.dev.middleArr[A_Index], True)
+		Loop this.dev.middleArr.Length
+			_inputString := StrReplace(_inputString, this.dev.engMiddleArr[A_Index], this.dev.middleArr[A_Index])
+		Loop this.dev.doubleFinalArr.Length
+			_inputString := RegExReplace(_inputString, this.dev.engDoubleFinalArr[A_Index] "([^ㅏ-ㅣ])", this.dev.doubleFinalArr[A_Index] "$1")
+		Loop this.dev.finalArr.Length
+			_inputString := RegExReplace(_inputString, this.dev.engFinalArr[A_Index] "([^ㅏ-ㅣ])", this.dev.FinalArr[A_Index] "$1")
+		Loop this.dev.firstArr.Length
+			_inputString := StrReplace(_inputString, this.dev.engFirstArr[A_Index], this.dev.firstArr[A_Index], True)
+		Loop this.dev.firstArr.Length
+			_inputString := StrReplace(_inputString, this.dev.engFirstArr[A_Index], this.dev.firstArr[A_Index])
+		Loop Parse, _inputString
+		{
+			if ((this.dev.IsVowel(A_LoopField) && this.dev.IsVowel(prevChar)) || (this.dev.IsConsonant(A_LoopField) && this.dev.IsConsonant(prevChar)))
+			{
+				wordArr.Push(tempArr)
+				tempArr := []
+			}
+			if (this.dev.IsVowel(prevPrevChar) && this.dev.IsFirstConsonant(prevChar) && this.dev.IsVowel(A_LoopField))
+			{
+				tempArr.Pop()
+				wordArr.Push(tempArr)
+				tempArr := [prevChar]
+			}
+			tempArr.Push(A_LoopField)
+			if (A_LoopField ~= "[^ㄱ-ㅎㅏ-ㅣ]")
+			{
+				tempArr.Pop()
+				wordArr.Push(tempArr)
+				wordArr.Push([A_LoopField])
+				tempArr := []
+			}
+			prevPrevChar := prevChar
+			prevChar := A_LoopField
+		}
+		wordArr.Push(tempArr)
+		Loop wordArr.Length
+		{
+			if (wordArr[A_Index].Length = 1)
+				result .= wordArr[A_Index][1]
+			else if (wordArr[A_Index].Length = 2 && this.dev.IsFirstConsonant(wordArr[A_Index][1]) && this.dev.IsVowel(wordArr[A_Index][2]))
+				result .= this.Combine(wordArr[A_Index][1], wordArr[A_Index][2])
+			else if (wordArr[A_Index].Length = 3 && this.dev.IsFirstConsonant(wordArr[A_Index][1]) && this.dev.IsVowel(wordArr[A_Index][2]) && this.dev.IsFinalConsonant(wordArr[A_Index][3]))
+				result .= this.Combine(wordArr[A_Index][1], wordArr[A_Index][2], wordArr[A_Index][3])
+			else
+			{
+				i := A_Index
+				Loop wordArr[A_Index].Length
+					result .= wordArr[i][A_Index]
+			}
+		}
+		return result
+	}
+
+	/* =========================
 	 * FixParticle(_inputString)
 	 * Fix Korean prepositional particles automatically (Example: 교육를 > 교육을)
 	 *
@@ -180,10 +253,14 @@ class EveryHangul
 		firstArr := ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"]
 		middleArr := ["ㅏ", "ㅐ", "ㅑ", "ㅒ", "ㅓ", "ㅔ", "ㅕ", "ㅖ", "ㅗ", "ㅘ", "ㅙ", "ㅚ", "ㅛ", "ㅜ", "ㅝ", "ㅞ", "ㅟ", "ㅠ", "ㅡ", "ㅢ", "ㅣ"]
 		finalArr := ["ㄱ", "ㄲ", "ㄳ", "ㄴ", "ㄵ", "ㄶ", "ㄷ", "ㄹ", "ㄺ", "ㄻ", "ㄼ", "ㄽ", "ㄾ", "ㄿ", "ㅀ", "ㅁ", "ㅂ", "ㅄ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"]
+		doubleMiddleArr := ["ㅘ", "ㅙ", "ㅚ", "ㅝ", "ㅞ", "ㅟ", "ㅢ"]
+		doubleFinalArr := ["ㄳ", "ㄵ", "ㄶ", "ㄺ", "ㄻ", "ㄼ", "ㄽ", "ㄾ", "ㄿ", "ㅀ", "ㅄ"]
 
 		engFirstArr := ["r", "R", "s", "e", "E", "f", "a", "q", "Q", "t", "T", "d", "w", "W", "c", "z", "x", "v", "g"]
 		engMiddleArr := ["k", "o", "i", "O", "j", "p", "u", "P", "h", "hk", "ho", "hl", "y", "n", "nj", "np", "nl", "b", "m", "ml", "l"]
 		engFinalArr := ["r", "R", "rt", "s", "sw", "sg", "e", "f", "fr", "fa", "fq", "ft", "fx", "fv", "fg", "a", "q", "qt", "t", "T", "d", "w", "c", "z", "x", "v", "g"]
+		engDoubleMiddleArr := ["hk", "ho", "hl", "nj", "np", "nl", "ml"]
+		engDoubleFinalArr := ["rt", "sw", "sg", "fr", "fa", "fq", "ft", "fx", "fv", "fg", "qt"]
 
 		/* =========================
 		 * SplitIfDoubleFinal(_input)
