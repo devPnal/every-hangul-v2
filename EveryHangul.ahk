@@ -72,14 +72,16 @@ class EveryHangul
 		result := ""
 		Loop Parse, _inputString
 		{
-			if (consonantIndex := this.dev.IsInConsonants(A_LoopField))
-				result .= this.dev.engFinalArr[consonantIndex]
-			else if (vowelIndex := this.dev.IsInVowels(A_LoopField))
+			if (firstConsonantIndex := this.dev.IsFirstConsonant(A_LoopField))
+				result .= this.dev.engFirstArr[firstConsonantIndex]
+			else if (finalConsonantIndex := this.dev.IsFinalConsonant(A_LoopField))
+				result .= this.dev.engFinalArr[finalConsonantIndex]
+			else if (vowelIndex := this.dev.IsVowel(A_LoopField))
 				result .= this.dev.engMiddleArr[vowelIndex]
 			else if (isCompletedHangul := (Ord(A_LoopField) < Ord("가") || Ord(A_LoopField) > Ord("힣")))
 				result .= A_LoopField
 
-			if (consonantIndex || vowelIndex || isCompletedHangul)
+			if (firstConsonantIndex || finalConsonantIndex || vowelIndex || isCompletedHangul)
 				continue
 
 			charNum := this.dev.GetCharNum(A_LoopField)
