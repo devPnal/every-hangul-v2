@@ -249,29 +249,24 @@ class EveryHangul
 		}
 
 		/* =========================
-		 * IsInConsonants(_inputString)
+		 * IsConsonant(_inputString)
 		 * Check if given string is in Korean consonants.
 		 *
 		 * @Parameter
 		 * _inputString: A single string to check if it's in consonants.
 		 *
 		 * @Return value
-		 * false(0) - if given string is not a consonant. (example: "각", "e", "ㅏ" -> 0)
-		 * true(index) - if given string is a consonant. (example: "ㄱ" -> 1, "ㄲ" -> 2)
-		 *
-		 * Note: The 'index' means the index of finalArr[].
+		 * false(0) - if given string is not a consonant.
+		 * true(1) - if given string is a consonant
 		 * ==========================
 		 */
-		IsInConsonants(_inputString)
+		IsConsonant(_inputString)
 		{
-			Loop this.finalArr.Length
-				if (this.finalArr[A_index] = _inputString)
-					return A_index
-			return false
+			return this.IsFirstConsonant(_inputString) || this.IsFinalConsonant(_inputString)
 		}
 
 		/* =========================
-		 * IsInVowels(_inputString)
+		 * IsVowel(_inputString)
 		 * Check if given string is in Korean vowels.
 		 *
 		 * @Parameter
@@ -284,10 +279,54 @@ class EveryHangul
 		 * Note: The 'index' means the index of middleArr[].
 		 * ==========================
 		 */
-		IsInVowels(_inputString)
+		IsVowel(_inputString)
 		{
 			Loop this.middleArr.Length
 				if (this.middleArr[A_index] = _inputString)
+					return A_index
+			return false
+		}
+
+		/* =========================
+		 * IsFirstConsonant(_inputString)
+		 * Check if given string can be a first consonant(초성).
+		 *
+		 * @Parameter
+		 * _inputString: A single string to check if it can be a first consonant
+		 *
+		 * @Return value
+		 * false(0) - if given string can't be a first consonant
+		 * true(index) - if given string can be a first consonant
+		 *
+		 * Note: The 'index' means the index of firstArr[].
+		 * ==========================
+		 */
+		IsFirstConsonant(_inputString)
+		{
+			Loop this.firstArr.Length
+				if (this.firstArr[A_index] = _inputString)
+					return A_index
+			return false
+		}
+
+		/* =========================
+		 * IsFinalConsonant(_inputString)
+		 * Check if given string can be a final consonant(종성).
+		 *
+		 * @Parameter
+		 * _inputString: A single string to check if it can be a final consonant
+		 *
+		 * @Return value
+		 * false(0) - if given string can't be a final consonant
+		 * true(index) - if given string can be a final consonant
+		 *
+		 * Note: The 'index' means the index of finalArr[].
+		 * ==========================
+		 */
+		IsFinalConsonant(_inputString)
+		{
+			Loop this.finalArr.Length
+				if (this.finalArr[A_index] = _inputString)
 					return A_index
 			return false
 		}
