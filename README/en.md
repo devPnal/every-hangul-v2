@@ -26,6 +26,8 @@ Please refer to the example file.
 * Convert Korean to English keys (안녕 > dkssud)
 * Fix Korean particles (청춘를 > 청춘을)
 * Fix all Korean particles in sentence (철수은 영희을 좋아한다. > 철수는 영희를 좋아한다.)
+* Pick random Korean consonants or vowels
+* Check if current IME mode is Korean
 
 ## Support and contributions
 * If you have any problems during use, please register a GitHub issue or email to contact@pnal.dev
