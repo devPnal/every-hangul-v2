@@ -38,4 +38,24 @@ MsgBox(hangul.FixParticleAll("④ 교육의 자주성ㆍ전문성ㆍ정치적 �
 ;Combine() makes perfect Korean character. (ㅍ+ㅕ+ㅇ = 평, ㅅ+ㅐ+ㅇ = 생, ㄱ+ㅛ = 교, ㅇ+ㅠ+ㄱ = 육)
 Msgbox("⑤ 국가는 " hangul.Combine("ㅍ", "ㅕ", "ㅇ") hangul.Combine("ㅅ", "ㅐ", "ㅇ") hangul.Combine("ㄱ", "ㅛ") hangul.Combine("ㅇ", "ㅠ", "ㄱ") "을 진흥하여야 한다.")
 
+;GetRandom() gives a random character.
+first := hangul.GetRandom(1)
+middle := hangul.GetRandom(2)
+final := hangul.GetRandom(3)
+Msgbox(first ", " middle ", " final "`nCombined: " hangul.Combine(first, middle, final))
+
+;IsKoreanStatus() returns true when you can type Korean now.
+if (hangul.IsKoreanStatus())
+	MsgBox("You can write Korean now")
+else
+	MsgBox("You can't write Korean now. The IME is English or something else")
+
+;IsKoreanStatus() can get any window's IME status.
+;NOTE: In default settings, the values are same between windows. (All are 0 or 1)
+allWindowID := WinGetList()
+result := "Window ID`tstatus`n"
+Loop allWindowID.Length
+	result .= "Win # " allWindowID[A_Index] "`t" hangul.IsKoreanStatus(allWindowID[A_Index]) "`n"
+Msgbox(result)
+
 ;More details can be found in the library file (EveryHangul.ahk). There are detailed descriptions of the functions.
