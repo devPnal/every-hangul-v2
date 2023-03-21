@@ -277,6 +277,32 @@ class EveryHangul
 	}
 
 	/* =========================
+	 * GetRandom(_sector)
+	 * Get random korean consonants or vowels.
+	 *
+	 * @Parameter
+	 * _sector: 1 - pick in first consonant list. (ㄱ, ㄲ, ㄴ...)
+	 * 			2 - pick in vowel list. (ㅏ, ㅐ, ㅑ...)
+	 *			3 - pick in final consonant list. (ㄱ, ㄲ, ㄳ...)
+	 *
+	 * @Return value
+	 * result: picked character
+	 *
+	 * Note: You can write "First", "Middle", "Final" instead of 1, 2, 3. It helps code readable.
+	 * ==========================
+	 */
+	GetRandom(_sector)
+	{
+		switch _sector
+		{
+			case 1, "First": return this.dev.firstArr[Random(1, 19)]
+			case 2, "Middle": return this.dev.middleArr[Random(1, 21)]
+			case 3, "Final": return this.dev.finalArr[Random(1, 27)]
+			default: return ""
+		}
+	}
+
+	/* =========================
 	 * [For development]
 	 * Functions below this are used for other functions in this library and may be meaningless in actual use.
 	 * For example, if you use the GetCharNum() function to get the index of Hangul character, this does not return the actual index of Unicode.
