@@ -303,6 +303,29 @@ class EveryHangul
 	}
 
 	/* =========================
+	 * IsKoreanStatus(_windowID := "A")
+	 * Check if the window's IME status is Korean.
+	 *
+	 * @Parameter
+	 * _windowID: The hwnd of window that you want to get IME status. If omitted, the active window is selected.
+	 *
+	 * @Return value
+	 * result: 	true(1) - The IME status is Korean.
+	 *			false(0) - The IME status is not Korean.
+	 *
+	 * Note: Although you set IME as Korean, you MUST press right-alt key to change Korean input mode.
+	 * If not, the function return only false.
+	 * ==========================
+	 */
+	IsKoreanStatus(_windowID := "A")
+	{
+		detectMode := DetectHiddenWindows(true)
+		result := SendMessage(0x283, 0x5, 0,,"ahk_id " DllCall("imm32\ImmGetDefaultIMEWnd", "Uint", WinExist("A")))
+		DetectHiddenWindows(detectMode)
+		return result
+	}
+
+	/* =========================
 	 * [For development]
 	 * Functions below this are used for other functions in this library and may be meaningless in actual use.
 	 * For example, if you use the GetCharNum() function to get the index of Hangul character, this does not return the actual index of Unicode.
