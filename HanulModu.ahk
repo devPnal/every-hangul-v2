@@ -4,10 +4,10 @@ You should have received a copy of the MIT License along with this library.
 */
 
 /* #############################################################
- * Every Hangul v2.0.0
+ * HanulModu v2.0.0
  *
- * Author: 프날(Pnal) - https://pnal.dev (blog: https://blog.pnal.dev)
- * Contact: Contact@pnal.dev
+ * Author: 프날(Pnal) - https://pnal.dev (contact@pnal.dev)
+ * Project URL: - https://github.com/devPnal/HanulModu
  * Description: A library for handling with the Korean alphabet, 'Hangul'.
  * License: MIT License (see LICENSE file)
  *
@@ -18,9 +18,9 @@ You should have received a copy of the MIT License along with this library.
 
 #Requires AutoHotkey v2.0
 
-class EveryHangul
+class HanulModu
 {
-	dev := EveryHangul.Development()
+	dev := HanulModu.Development()
 
 	/* =========================
 	 * Split(_inputString, _isHard := 0)
@@ -322,6 +322,31 @@ class EveryHangul
 		detectMode := DetectHiddenWindows(true)
 		result := SendMessage(0x283, 0x5, 0,,"ahk_id " DllCall("imm32\ImmGetDefaultIMEWnd", "Uint", WinExist("A")))
 		DetectHiddenWindows(detectMode)
+		return result
+	}
+
+	/* =========================
+	 * GetFirstConsonant(_inputString)
+	 * Get the first consonants of the given string. (Example: 안녕하세요 > ㅇㄴㅎㅅㅇ)
+	 *
+	 * @Parameter
+	 * _inputString: The string that you want to get first consonants.
+	 *
+	 * @Return value
+	 * The first consonants of the given string.
+	 * ==========================
+	 */
+	GetFirstConsonant(_inputString)
+	{
+		Loop Parse, _inputString
+		{
+			if (Ord(A_LoopField) < Ord("가") || Ord(A_LoopField) > Ord("힣"))
+			{
+				result .= A_LoopField
+				continue
+			}
+			result .= this.dev.firstArr[this.dev.GetCharNum(A_LoopField).firstChar]
+		}
 		return result
 	}
 
