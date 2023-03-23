@@ -277,6 +277,31 @@ class HanulModu
 	}
 
 	/* =========================
+	 * GetFirstConsonant(_inputString)
+	 * Get the first consonants of the given string. (Example: 안녕하세요 > ㅇㄴㅎㅅㅇ)
+	 *
+	 * @Parameter
+	 * _inputString: The string that you want to get first consonants.
+	 *
+	 * @Return value
+	 * The first consonants of the given string.
+	 * ==========================
+	 */
+	GetFirstConsonant(_inputString)
+	{
+		Loop Parse, _inputString
+		{
+			if (Ord(A_LoopField) < Ord("가") || Ord(A_LoopField) > Ord("힣"))
+			{
+				result .= A_LoopField
+				continue
+			}
+			result .= this.dev.firstArr[this.dev.GetCharNum(A_LoopField).firstChar]
+		}
+		return result
+	}
+
+	/* =========================
 	 * GetRandom(_sector)
 	 * Get random korean consonants or vowels.
 	 *
@@ -322,31 +347,6 @@ class HanulModu
 		detectMode := DetectHiddenWindows(true)
 		result := SendMessage(0x283, 0x5, 0,,"ahk_id " DllCall("imm32\ImmGetDefaultIMEWnd", "Uint", WinExist("A")))
 		DetectHiddenWindows(detectMode)
-		return result
-	}
-
-	/* =========================
-	 * GetFirstConsonant(_inputString)
-	 * Get the first consonants of the given string. (Example: 안녕하세요 > ㅇㄴㅎㅅㅇ)
-	 *
-	 * @Parameter
-	 * _inputString: The string that you want to get first consonants.
-	 *
-	 * @Return value
-	 * The first consonants of the given string.
-	 * ==========================
-	 */
-	GetFirstConsonant(_inputString)
-	{
-		Loop Parse, _inputString
-		{
-			if (Ord(A_LoopField) < Ord("가") || Ord(A_LoopField) > Ord("힣"))
-			{
-				result .= A_LoopField
-				continue
-			}
-			result .= this.dev.firstArr[this.dev.GetCharNum(A_LoopField).firstChar]
-		}
 		return result
 	}
 
