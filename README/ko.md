@@ -1,7 +1,7 @@
 [한국어](/README/ko.md) | [English](/README/en.md)
 
 # 모두의 한글 v2
-📚 한글 처리를 위한 라이브러리.
+📚 한글 처리를 위한 오토핫키 라이브러리.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -19,7 +19,7 @@ instance := EveryHangul()
 
 그 후 `instance.FunctionName` 형태로 라이브러리 내 함수를 자유롭게 이용할 수 있습니다.
 
-예제 파일을 참고해 주세요. 아래 [지원 기능]의 각 함수명을 눌러도 설명이 나타납니다.
+예제 파일을 참고해 주세요. 
 
 ## 지원 기능
 * Split() : 한글의 음소 분리 (안녕 > ㅇㅏㄴㄴㅕㅇ)

@@ -18,9 +18,9 @@ You should have received a copy of the MIT License along with this library.
 
 #Requires AutoHotkey v2.0
 
-class HanulModu
+class EveryHangul
 {
-	dev := HanulModu.Development()
+	dev := EveryHangul.Development()
 
 	/* =========================
 	 * Split(_inputString, _isHard := 0)

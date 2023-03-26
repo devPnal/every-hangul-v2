@@ -19,7 +19,7 @@ instance := EveryHangul()
 
 Now, you can freely use the functions in the library in the form of `instance.FunctionName`.
 
-Please refer to the example file. Also you can read the document to click the function name in the [Supported functions] section below.
+Please refer to the example file.
 
 ## Supported functions
 * Split() : Split phonemes in Hangul (안녕 > ㅇㅏㄴㄴㅕㅇ)

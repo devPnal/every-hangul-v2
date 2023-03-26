@@ -4,7 +4,7 @@ You should have received a copy of the MIT License along with this library.
 */
 
 /* #############################################################
- * Demo for HanulModu v2.0+
+ * Demo for Every Hangul v2.0+
  *
  * Author: 프날(Pnal) - https://pnal.dev (contact@pnal.dev)
  *
@@ -13,9 +13,9 @@ You should have received a copy of the MIT License along with this library.
  * #############################################################
  */
 
-#Include HanulModu.ahk
+#Include EveryHangul.ahk
 
-hangul := HanulModu() ;Create Instance
+hangul := EveryHangul() ;Create Instance
 
 ;Split() splits all consonants and vowels.
 MsgBox(hangul.Split("헌법 제31조"))
