@@ -4,6 +4,7 @@
 📚 한글 처리를 위한 오토핫키 라이브러리.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+⭐ → ❤️
 
 ## 사용 방법
 아래와 같이 라이브러리 파일을 스크립트에 포함시킵니다.

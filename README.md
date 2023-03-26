@@ -4,6 +4,7 @@
 📚 AutoHotkey library for processing the Korean alphabet, "Hangul".
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+⭐ → ❤️
 
 ## How to use
 Include the library file in your script like below .
