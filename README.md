@@ -3,7 +3,7 @@
 # Every Hangul v2
 📚 AutoHotkey library for processing the Korean alphabet, "Hangul".
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)<br>
 ⭐ → ❤️
 
 ## How to use

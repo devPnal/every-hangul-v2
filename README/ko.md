@@ -3,7 +3,7 @@
 # 모두의 한글 v2
 📚 한글 처리를 위한 오토핫키 라이브러리.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)<br>
 ⭐ → ❤️
 
 ## 사용 방법
