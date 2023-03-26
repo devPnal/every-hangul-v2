@@ -4,10 +4,10 @@ You should have received a copy of the MIT License along with this library.
 */
 
 /* #############################################################
- * HanulModu v2.0.0
+ * Every Hangul v2.0.0
  *
  * Author: 프날(Pnal) - https://pnal.dev (contact@pnal.dev)
- * Project URL: - https://github.com/devPnal/HanulModu
+ * Project URL: - https://github.com/devPnal/every-hangul-v2
  * Description: A library for handling with the Korean alphabet, 'Hangul'.
  * License: MIT License (see LICENSE file)
  *
