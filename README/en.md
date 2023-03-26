@@ -1,12 +1,25 @@
 [한국어](/README/ko.md) | [English](/README/en.md)
 
-# HanulModu [hɐnɨlmodu]
-📚 The library for processing the Korean alphabet, "Hangul".
+# Every Hangul v2
+📚 AutoHotkey library for processing the Korean alphabet, "Hangul".
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## How to compile
-preparing
+## How to use
+Include the library file in your script like below .
+```
+#include EveryHangul.ahk
+```
+
+After that, create a new instance.
+
+```
+instance := EveryHangul()
+```
+
+Now, you can freely use the functions in the library in the form of `instance.FunctionName`.
+
+Please refer to the example file. Also you can read the document to click the function name in the [Supported functions] section below.
 
 ## Supported functions
 * Split() : Split phonemes in Hangul (안녕 > ㅇㅏㄴㄴㅕㅇ)

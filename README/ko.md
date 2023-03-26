@@ -6,7 +6,20 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 사용 방법
-준비 중
+아래와 같이 라이브러리 파일을 스크립트에 포함시킵니다.
+```
+#include EveryHangul.ahk
+```
+
+그 뒤, 새 인스턴스를 만듭니다.
+
+```
+instance := EveryHangul()
+```
+
+그 후 `instance.FunctionName` 형태로 라이브러리 내 함수를 자유롭게 이용할 수 있습니다.
+
+예제 파일을 참고해 주세요. 아래 [지원 기능]의 각 함수명을 눌러도 설명이 나타납니다.
 
 ## 지원 기능
 * Split() : 한글의 음소 분리 (안녕 > ㅇㅏㄴㄴㅕㅇ)
