@@ -1,4 +1,4 @@
-﻿/*
+/*
 MIT License, Copyright (C) 2022 프날(Pnal, contact@pnal.dev)
 You should have received a copy of the MIT License along with this library.
 */
@@ -46,6 +46,6 @@ statusMsg := hangul.IsKoreanStatus() ? "You can write Korean now" : "You can't w
 MsgBox(statusMsg)
 
 /* #############################################################
- * More details can be found in the library file (Modugul.ahk). There are detailed descriptions of the functions.
+ * More details can be found in the library file (EveryHangul.ahk). There are detailed descriptions of the functions.
  * #############################################################
  */
