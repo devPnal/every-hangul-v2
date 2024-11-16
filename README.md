@@ -33,6 +33,9 @@ Please refer to the example file.
 * GetRandom() : Pick random Korean consonants or vowels
 * IsKoreanStatus() : Check if current IME mode is Korean
 * Pronounce() : Convert written Korean to standard pronouncation (꽃밭 > 꼳빧)
+* Romanize(): Convert Korean to romanize pronouncation (대관령 > Daegwallyeong)
+
+However, Pronounce() and Romanize() may not be accurate in all cases.
 
 ## Support and contributions
 * If you have any problems during use, please register a GitHub issue or email to contact@pnal.dev

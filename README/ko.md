@@ -33,6 +33,9 @@ instance := EveryHangul()
 * GetRandom() : 임의의 한글 자모 뽑기
 * IsKoreanStatus() : 현재 IME 입력 모드가 한글인지 확인
 * Pronounce() : 국어의 표준 발음 규정에 따른 표준 발음으로 변환 (꽃밭 > 꼳빧)
+* Romanize() : 국어의 로마자 표기법에 따른 표준 표기법으로 변환 (대관령 > Daegwallyeong)
+
+단, Pronounce()와 Romanize()는 모든 경우에 정확하지 않을 수 있습니다.
 
 ## 지원 및 기여
 * 사용 중 문제가 있을 경우 GitHub 이슈 등록을 하거나, 이메일 contact@pnal.dev로 연락 주세요.
