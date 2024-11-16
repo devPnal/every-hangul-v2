@@ -32,6 +32,7 @@ Please refer to the example file.
 * GetFirstConsonant() : Get the first consonants (안녕 > ㅇㄴ)
 * GetRandom() : Pick random Korean consonants or vowels
 * IsKoreanStatus() : Check if current IME mode is Korean
+* Pronounce() : Convert written Korean to standard pronouncation (꽃밭 > 꼳빧)
 
 ## Support and contributions
 * If you have any problems during use, please register a GitHub issue or email to contact@pnal.dev

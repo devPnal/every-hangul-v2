@@ -20,7 +20,13 @@ You should have received a copy of the MIT License along with this library.
 
 class EveryHangul
 {
-	dev := EveryHangul.Development()
+	dev := {}
+
+	__New()
+	{
+			this.dev := EveryHangul.Development()
+			this.dev.RegisterCombineMethod(this.Combine.Bind(this))
+	}
 
 	/* =========================
 	 * Split(_inputString, _isHard := 0)
@@ -351,6 +357,63 @@ class EveryHangul
 	}
 
 	/* =========================
+	 * Pronounce(_inputString)
+	 * Return standard pronounce of Korean sentence
+	 *
+	 * @Parameter
+	 * _inputString: Writed text
+	 *
+	 * @Return value
+	 * result: String that changed to standard pronounce
+	 *
+	 * Korean has many irregular conjugations and exceptions, so it's not perfect!
+	 * Part-of-speech dependent pronunciations cannot be implemented.
+	 * ==========================
+	 */
+	Pronounce(_inputString)
+	{
+		result := ""
+
+		inputString := _inputString
+
+		;연음 처리
+		inputString := this.dev.linking(inputString)
+
+		;제4장 12항 1, 붙임1, 붙임2
+		inputString := this.dev.AlliterateHieut(inputString)
+
+		;받침에 올 수 있는 ㄱㄴㄷㄹㅁㅂㅇ로 바꾸기
+		inputString := this.dev.ChangeFinalChar(inputString)
+
+
+		;제2장 5항 다만 1
+		; 용언의 활용형이 아닌 져, 쪄, 쳐의 쓰임을 찾을 수 없었기 때문에, 모든 져, 쪄, 쳐를 일괄 변환
+		inputString := RegExReplace(inputString, "져", "저")
+		inputString := RegExReplace(inputString, "쪄", "쩌")
+		inputString := RegExReplace(inputString, "쳐", "처")
+
+		;제2장 5항 다만3
+		uiArr := ["긔", "끠", "늬", "듸", "띄", "릐", "믜", "븨", "쁴", "싀", "씌", "즤", "쯰", "츼", "킈", "틔", "픠", "희"]
+		iArr := ["기", "끼", "니", "디", "띠", "리", "미", "비", "삐", "시", "씨", "지", "찌", "치", "키", "티", "피", "히"]
+		Loop uiArr.Length
+			inputString := RegExReplace(inputString, "(([^가-힣])|^)(" uiArr[A_Index] ")", "$1" iArr[A_Index])
+
+		;제5장 제17항 및 붙임
+		inputString := this.dev.AssimilateFirstConsonant(_inputString, inputString)
+
+		;제5장 제18항, 19항, 20항
+		inputString := this.dev.AssimilateAll(inputString)
+
+		;제6장
+		inputString := this.dev.Tensionalization(inputString)
+
+		result := inputString
+
+		if (_inputString != result)
+			result := this.Pronounce(result)
+		return result
+	}
+	/* =========================
 	 * [For development]
 	 * Functions below this are used for other functions in this library and may be meaningless in actual use.
 	 * For example, if you use the GetCharNum() function to get the index of Hangul character, this does not return the actual index of Unicode.
@@ -358,6 +421,13 @@ class EveryHangul
 	 */
 	class Development
 	{
+		static __combineMethod := {}
+
+		RegisterCombineMethod(method)
+		{
+			this.__combineMethod := method
+		}
+
 		firstArr := ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"]
 		middleArr := ["ㅏ", "ㅐ", "ㅑ", "ㅒ", "ㅓ", "ㅔ", "ㅕ", "ㅖ", "ㅗ", "ㅘ", "ㅙ", "ㅚ", "ㅛ", "ㅜ", "ㅝ", "ㅞ", "ㅟ", "ㅠ", "ㅡ", "ㅢ", "ㅣ"]
 		finalArr := ["ㄱ", "ㄲ", "ㄳ", "ㄴ", "ㄵ", "ㄶ", "ㄷ", "ㄹ", "ㄺ", "ㄻ", "ㄼ", "ㄽ", "ㄾ", "ㄿ", "ㅀ", "ㅁ", "ㅂ", "ㅄ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"]
@@ -369,6 +439,8 @@ class EveryHangul
 		engFinalArr := ["r", "R", "rt", "s", "sw", "sg", "e", "f", "fr", "fa", "fq", "ft", "fx", "fv", "fg", "a", "q", "qt", "t", "T", "d", "w", "c", "z", "x", "v", "g"]
 		engDoubleMiddleArr := ["hk", "ho", "hl", "nj", "np", "nl", "ml"]
 		engDoubleFinalArr := ["rt", "sw", "sg", "fr", "fa", "fq", "ft", "fx", "fv", "fg", "qt"]
+
+		pronounceFinalArr := ["ㄱ", "ㄱ", "ㄱ", "ㄴ", "ㄴ", "ㄴ", "ㄷ", "ㄹ", "ㄱ", "ㅁ", "ㄹ", "ㄹ", "ㄹ", "ㅍ", "ㄹ", "ㅁ", "ㅂ", "ㅂ", "ㄷ", "ㄷ", "ㅇ", "ㄷ", "ㄷ", "ㄱ", "ㄷ", "ㅂ", "ㄷ"]
 
 		/* =========================
 		 * SplitIfDoubleFinal(_input)
@@ -516,6 +588,431 @@ class EveryHangul
 				if (this.finalArr[A_index] = _inputString)
 					return A_index
 			return false
+		}
+
+		/* =========================
+		 * linking(_inputString)
+		 * linking for 'ㅇ'
+		 *
+		 * @Parameter
+		 * _inputString: String to Alliterate 'ㅇ' (ex: 연음 => 여늠)
+		 *
+		 * @Return value
+		 * result: Alliterated string
+		 * ==========================
+		 */
+		linking(_inputString)
+		{
+			stringArr := StrSplit(_inputString)
+			trailedChar := ""
+			result := ""
+			for index, char in stringArr
+			{
+				if (Ord(char) < Ord("가") || Ord(char) > Ord("힣"))
+				{
+					result .= char
+					continue
+				}
+				charNum := this.GetCharNum(char)
+				first := this.firstArr[charNum.firstChar]
+				middle := this.middleArr[charNum.middleChar]
+				final := ""
+				if (charNum.finalChar != 0)
+					final := this.finalArr[charNum.finalChar]
+
+				if (A_Index != stringArr.Length && this.GetCharNum(stringArr[A_Index + 1]).firstChar = 12 && final != "" && (final != "ㅇ" && final != "ㅎ") && trailedChar = "") ;다음 글의 자모가 ㅇ이면서 종성이 있을 경우
+				{
+					result .= this.Combine(first, middle)
+					prevCharNum := charNum
+					trailedChar := final
+					continue
+				}
+				if (trailedChar) ;이전 글에서 연음이 일어났을 경우
+				{
+					if (trailedChar = this.SplitIfDoubleFinal(trailedChar)) ;홑모음이면
+						result .= this.Combine(trailedChar, middle, final)
+					else if (trailedChar != "ㄶ" && trailedChar != "ㅀ")
+						result := SubStr(result, 1, -1) this.Combine(this.FirstArr[prevCharNum.firstChar], this.MiddleArr[prevCharNum.middleChar], SubStr(this.SplitIfDoubleFinal(trailedChar), 1, 1))  this.Combine(SubStr(this.SplitIfDoubleFinal(trailedChar), 2, 1), middle, final)
+					else
+						result := SubStr(result, 1, -1) this.Combine(this.FirstArr[prevCharNum.firstChar], this.MiddleArr[prevCharNum.middleChar], SubStr(this.SplitIfDoubleFinal(trailedChar), 1, 1))  this.Combine("ㅇ", middle, final)
+					trailedChar := ""
+					continue
+				}
+				result .= char
+			}
+			if (_inputString != result)
+				result := this.linking(result)
+			return result
+		}
+
+		/* =========================
+		 * AlliterationHieut(_inputString)
+		 * Alliteration for 'ㅎ'
+		 *
+		 * @Parameter
+		 * _inputString: String to Alliterate final 'ㅎ' (ex: 닿다 => 다타, 닿길 => 다킬, 닫힘 => 다팀)
+		 *
+		 * @Return value
+		 * result: Alliterated string
+		 * ==========================
+		 */
+		AlliterateHieut(_inputString)
+		{
+			stringArr := StrSplit(_inputString)
+			prevChar := ""
+			result := ""
+			trailedChar := ""
+			for index, char in stringArr
+			{
+				if (Ord(char) < Ord("가") || Ord(char) > Ord("힣"))
+				{
+					result .= char
+					continue
+				}
+				charNum := this.GetCharNum(char)
+				first := this.firstArr[charNum.firstChar]
+				middle := this.middleArr[charNum.middleChar]
+				final := ""
+
+				prevCharNum := this.GetCharNum(prevChar)
+				if (charNum.finalChar != 0)
+					final := this.finalArr[charNum.finalChar]
+
+				if (A_Index != 1) ;'닿다'와 같이 이전 글자의 종성이 ㅎ인 경우
+				{
+					switch this.GetCharNum(stringArr[A_Index - 1]).finalChar
+					{
+						case 27: ;ㅎ
+							result := first = "ㄱ" || first = "ㄷ" || first = "ㅈ" || first = "ㅅ" || first = "ㄴ" ? AlliterateCombine(result, "") : AlliterateCombine(result, final)
+							continue
+						case 6: ;ㄶ
+							result := AlliterateCombine(result, "ㄴ")
+							continue
+						case 15: ;ㅀ
+							result := AlliterateCombine(result, "ㄹ")
+							continue
+					}
+				}
+
+				; '닫힘'과 같이 다음 글자의 초성이 ㅎ인 경우
+				if (A_Index != stringArr.Length && this.GetCharNum(stringArr[A_Index + 1]).firstChar = 19 && final != "" && trailedChar = "") ;다음 글의 자모가 ㅎ이면서 종성이 있을 경우
+				{
+					switch final
+					{
+						case "ㄺ", "ㄼ":
+							result .= this.Combine(first, middle, "ㄹ")
+						case "ㄵ":
+							result .= this.Combine(first, middle, "ㄴ")
+						case "ㄱ", "ㄺ", "ㄷ", "ㅅ", "ㅈ", "ㅊ", "ㅌ", "ㅂ", "ㄼ", "ㄵ":
+							result .= this.Combine(first, middle)
+						default:
+							result .= this.Combine(first, middle, final)
+					}
+					trailedChar := final
+					continue
+				}
+				if (trailedChar) ;이전 글에서 연음이 일어났을 경우
+				{
+					trail := ""
+					switch trailedChar
+					{
+						case "ㄱ", "ㄺ":
+							trail := "ㅋ"
+						case "ㄷ", "ㅅ", "ㅈ", "ㅊ", "ㅌ":
+							trail := "ㅌ"
+						case "ㅂ", "ㄼ":
+							trail := "ㅍ"
+						case "ㅈ", "ㄵ":
+							trail := "ㅊ"
+						default:
+							result .= this.Combine(first, middle, final)
+							trailedChar := ""
+							continue
+					}
+					result .= this.Combine(trail, middle, final)
+					trailedChar := ""
+					continue
+				}
+
+				result .= char
+				prevChar := char
+			}
+			if (_inputString != result)
+				result := this.AlliterateHieut(result)
+			return result
+
+			AlliterateCombine(_string, _changedChar)
+			{
+				result := SubStr(_string, 1, -1) this.Combine(this.firstArr[prevCharNum.firstChar], this.middleArr[prevCharNum.middleChar], _changedChar)
+				if (first = "ㄴ")
+				{
+					result := SubStr(_string, 1, -1) this.Combine(this.firstArr[prevCharNum.firstChar], this.middleArr[prevCharNum.middleChar], "ㄴ")
+					if (this.finalArr[prevCharNum.finalChar] = "ㅀ")
+						result := SubStr(_string, 1, -1) this.Combine(this.firstArr[prevCharNum.firstChar], this.middleArr[prevCharNum.middleChar], "ㄹ")
+				}
+				switch first
+				{
+					case "ㄱ":
+						result .= this.Combine("ㅋ", middle, final)
+					case "ㄷ":
+						result .= this.Combine("ㅌ", middle, final)
+					case "ㅈ":
+						result .= this.Combine("ㅊ", middle, final)
+					case "ㅅ":
+						result .= this.Combine("ㅆ", middle, final)
+					default:
+						result .= this.Combine(first, middle, final)
+				}
+				return result
+			}
+		}
+
+		/* =========================
+		 * ChangeFinalChar(_inputString)
+		 * Change final char to ㄱㄴㄷㄹㅁㅂㅇ
+		 *
+		 * @Parameter
+		 * _inputString: String to change final consonant (ex: 티읕 => 티읃)
+		 *
+		 * @Return value
+		 * result: Chnaged string
+		 * ==========================
+		 */
+		ChangeFinalChar(_inputString)
+		{
+			stringArr := StrSplit(_inputString)
+			trailedChar := ""
+			result := ""
+			for index, char in stringArr
+			{
+				if (Ord(char) < Ord("가") || Ord(char) > Ord("힣"))
+				{
+					result .= char
+					continue
+				}
+				charNum := this.GetCharNum(char)
+				first := this.firstArr[charNum.firstChar]
+				middle := this.middleArr[charNum.middleChar]
+				final := ""
+				if (charNum.finalChar != 0)
+					final := this.pronounceFinalArr[charNum.finalChar]
+
+				result .= this.Combine(first, middle, final)
+			}
+			return result
+		}
+
+		/* =========================
+		 * AssimilateFirstConsonant(_original, _changed)
+		 * Assimilate consonant (자음동화)
+		 *
+		 * @Parameter
+		 * _original: Original string
+		 * _changed: String to assimilate all ㄷ, ㅌ (ex: 미다디 => 미다지)
+		 *
+		 * @Return value
+		 * result: Chnaged string
+		 * ==========================
+		 */
+		AssimilateFirstConsonant(_original, _changed)
+		{
+			originalChars := StrSplit(_original)
+			changedChars := StrSplit(_changed)
+			result := ""
+			Loop changedChars.Length
+			{
+				if (originalChars[A_Index] = "이" && changedChars[A_Index] = "디")
+				{
+					result .= "지"
+					continue
+				}
+				else if ((originalChars[A_Index] = "이" && changedChars[A_Index] = "티") || (originalChars[A_Index] = "히" && changedChars[A_Index] = "티"))
+				{
+					result .= "치"
+					continue
+				}
+				result .= changedChars[A_Index]
+			}
+			return result
+		}
+
+		/* =========================
+		 * AssimilateAll(_inputString)
+		 * Assimilate all consonants
+		 *
+		 * @Parameter
+		 * _inputString: String to assimilate all consonants (ex: 밥먹음 => 밤먹음, 협력 => 혐녁, 신라 => 실라)
+		 *
+		 * @Return value
+		 * result: Chnaged string
+		 * ==========================
+		 */
+		AssimilateAll(_inputString)
+		{
+			ExceptWords := ["의견란", "임진란", "생산량", "결단력", "공권력", "동원령", "상견례", "횡단로", "이원론", "입원료", "구근류"]
+			ExceptWordsAnswer := ["의견난", "임진난", "생산냥", "결딴녁", "공꿘녁", "동원녕", "상견녜", "횡단노", "이원논", "이붠뇨", "구근뉴"]
+
+			for index, element in ExceptWords
+			{
+				_inputString := StrReplace(_inputString, element, ExceptWordsAnswer[index])
+			}
+
+			stringArr := StrSplit(_inputString)
+			result := ""
+			bieumization := false
+			prevFinal := ""
+			for index, char in stringArr
+			{
+				if (Ord(char) < Ord("가") || Ord(char) > Ord("힣"))
+				{
+					result .= char
+					continue
+				}
+				charNum := this.GetCharNum(char)
+				first := this.firstArr[charNum.firstChar]
+				middle := this.middleArr[charNum.middleChar]
+				final := ""
+				if (charNum.finalChar != 0)
+					final := this.finalArr[charNum.finalChar]
+
+				;다음 글의 초성이 ㄴ, ㅁ이면서 종성이 있을 경우 (5-18)
+				if (A_Index != stringArr.Length
+				&& (this.GetCharNum(stringArr[A_Index + 1]).firstChar = 3 || this.GetCharNum(stringArr[A_Index + 1]).firstChar = 7)
+				&& (final = "ㄱ" || final = "ㄷ" || final = "ㅂ"))
+				{
+					Switch final
+					{
+						case "ㄱ":
+							result .= this.Combine(first, middle, "ㅇ")
+						case "ㄷ":
+							result .= this.Combine(first, middle, "ㄴ")
+						case "ㅂ":
+							result .= this.Combine(first, middle, "ㅁ")
+					}
+					continue
+				}
+				if (bieumization) ;비음화
+				{
+					result .= this.Combine("ㄴ", middle, final)
+					bieumization := false
+					continue
+				}
+				else if (A_Index != stringArr.Length && this.GetCharNum(stringArr[A_Index + 1]).firstChar = 6 && (final = "ㄱ" || final = "ㅂ" || final = "ㅁ" || final = "ㅇ")) ;다음 글자의 초성이 ㄹ이면서 받침이 ㄱ, ㅂ, ㅁ, ㅇ이 경우 (5-19)
+					bieumization := true
+
+				;받침 ㄴ, 다음 글자 초성 ㄹ일 경우 ㄴ을 ㄹ로 발음 (5-20)
+				if (A_Index != stringArr.Length && this.GetCharNum(stringArr[A_Index + 1]).firstChar = 6 && (final = "ㄴ"))
+				{
+					result .= this.Combine(first, middle, "ㄹ")
+					continue
+				}
+				;현재 글자 초성 ㄴ, 이전 받침 ㄹ일 경우 ㄴ을 ㄹ로 발음 (5-20)
+				else if (A_Index != 1 && prevFinal = "ㄹ" && first = "ㄴ")
+				{
+					result .= this.Combine("ㄹ", middle, final)
+					continue
+				}
+				result .= char
+				prevFinal := final
+			}
+			if (_inputString != result)
+				result := this.linking(result)
+			return result
+		}
+
+		/* =========================
+		 * Tensionalization(_inputString)
+		 * Tensioning all consonants (된소리되기)
+		 *
+		 * @Parameter
+		 * _inputString: String to tension all consonants (ex: 꼳밭 => 꼳빧)
+		 *
+		 * @Return value
+		 * result: Chnaged string
+		 * ==========================
+		 */
+		Tensionalization(_inputString)
+		{
+			stringArr := StrSplit(_inputString)
+			prevFinal := ""
+			result := ""
+			trailedChar := ""
+			for index, char in stringArr
+			{
+				if (Ord(char) < Ord("가") || Ord(char) > Ord("힣"))
+				{
+					result .= char
+					continue
+				}
+				charNum := this.GetCharNum(char)
+				first := this.firstArr[charNum.firstChar]
+				middle := this.middleArr[charNum.middleChar]
+				final := ""
+
+				if (charNum.finalChar != 0)
+					final := this.finalArr[charNum.finalChar]
+
+				if (A_Index != 1 && (prevFinal = "ㄱ" || prevFinal = "ㄷ" || prevFinal = "ㅂ")) ;'꼳밭'과 같이 이전 글자의 종성이 ㄱ, ㄷ, ㅂ인 경우
+				{
+					switch first
+					{
+						case "ㄱ":
+							result .= this.Combine("ㄲ", middle, final)
+							continue
+						case "ㄷ":
+							result .= this.Combine("ㄸ", middle, final)
+							continue
+						case "ㅂ":
+							result .= this.Combine("ㅃ", middle, final)
+							continue
+						case "ㅈ":
+							result .= this.Combine("ㅉ", middle, final)
+							continue
+						case "ㅅ":
+							result .= this.Combine("ㅆ", middle, final)
+							continue
+					}
+				}
+				result .= char
+				prevFinal := final
+			}
+			if (_inputString != result)
+				result := this.Tensionalization(result)
+			return result
+		}
+
+		/*=========================
+		 * Combine(_first, _middle, _final)
+		 * Combine consonants and a vowel to make a character. (Example: ㅎ + ㅢ + ㄴ = 흰)
+		 *
+		 * @Parameter
+		 * _first: The first consonants what you want to combine.
+		 * _middle: The vowel what you want to combine.
+		 * _final: The final consonants what you want to combine. It can be omit. (Example: ㅅ+ㅓ+(omitted) = 서)
+		 *
+		 * @Return value
+		 * result: Combinned string (just one combinned character)
+		 * ==========================
+		 */
+		Combine(_first, _middle, _final := "")
+		{
+			firstIndex := middleIndex := 1
+			finalIndex := 0
+
+			Loop this.firstArr.Length
+				if (_first = this.firstArr[A_Index])
+					firstIndex := A_index
+			Loop this.middleArr.Length
+				if (_middle = this.middleArr[A_Index])
+					middleIndex := A_index
+			if (_final != "")
+				Loop this.finalArr.Length
+					if (_final = this.finalArr[A_Index])
+						finalIndex := A_index
+
+			result := Chr(0xAC00 + (((firstIndex - 1) * 21 + (middleIndex-1)) * 28 + finalIndex))
+			result := Ord(result) >= Ord("가") && Ord(result) <= Ord("힣") ? result : _first _middle _final
+			return result
 		}
 	}
 }

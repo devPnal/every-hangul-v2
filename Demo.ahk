@@ -35,6 +35,9 @@ MsgBox(hangul.FixParticleAll("④ 교육의 자주성ㆍ전문성ㆍ정치적 �
 ;GetFirstConsonant() returns only the first consonants in the given string.
 MsgBox(hangul.GetFirstConsonant("⑤ 국가는 평생교육을 진흥하여야 한다."))
 
+;Pronounce() returns Korean standard pronounce of sentence
+MsgBox(hangul.Pronounce("연음 법칙(連音法則, linking)은 자음으로 끝나는 음절에 모음으로 시작되는 형식형태소가 이어질 때 앞 음절의 끝소리가 뒷 음절의 첫소리가 되는 음운현상을 말한다. 음절의 경계가 달라진다."))
+
 ;GetRandom() gives a random character. Combine() makes perfect Korean character.
 first := hangul.GetRandom(1)
 middle := hangul.GetRandom(2)
