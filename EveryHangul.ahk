@@ -4,7 +4,7 @@ You should have received a copy of the MIT License along with this library.
 */
 
 /* #############################################################
- * Every Hangul v2.0.0
+ * Every Hangul v2.1
  *
  * Author: 프날(Pnal) - https://pnal.dev (contact@pnal.dev)
  * Project URL: - https://github.com/devPnal/every-hangul-v2
