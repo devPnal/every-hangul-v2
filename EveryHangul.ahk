@@ -4,7 +4,7 @@ You should have received a copy of the MIT License along with this library.
 */
 
 /* #############################################################
- * Every Hangul v2.1
+ * Every Hangul v2.2
  *
  * Author: 프날(Pnal) - https://pnal.dev (contact@pnal.dev)
  * Project URL: - https://github.com/devPnal/every-hangul-v2
@@ -413,6 +413,55 @@ class EveryHangul
 			result := this.Pronounce(result)
 		return result
 	}
+
+	/* =========================
+	 * Romanize(_inputString)
+	 * Return standard romanization of Korean sentence
+	 *
+	 * @Parameter
+	 * _inputString: Writed text
+	 *
+	 * @Return value
+	 * result: String that changed to standard romanization
+	 *
+	 * Korean has many irregular conjugations and exceptions, so it's not perfect!
+	 * Part-of-speech dependent pronunciations cannot be implemented.
+	 * ==========================
+	 */
+	Romanize(_inputString)
+	{
+		inputString := this.Pronounce(_inputString)
+
+		result := ""
+		Loop Parse, inputString
+		{
+			if (Ord(A_LoopField) < Ord("가") || Ord(A_LoopField) > Ord("힣"))
+			{
+				if (index := this.dev.IsConsonant(A_LoopField))
+				{
+					result .= this.dev.romFirstArr[index]
+					continue
+				}
+				else if (index := this.dev.IsVowel(A_LoopField))
+				{
+					result .= this.dev.romMiddleArr[index]
+					continue
+				}
+				result .= A_LoopField
+				continue
+			}
+			charNum := this.dev.GetCharNum(A_LoopField)
+			first := this.dev.romFirstArr[charNum.firstChar]
+			middle := this.dev.romMiddleArr[charNum.middleChar]
+			final := ""
+			if (charNum.finalChar != 0)
+				final := this.dev.romFinalArr[charNum.finalChar]
+			result .= first middle final
+		}
+		result := StrReplace(result, "lr", "ll")
+		return StrUpper(SubStr(result, 1, 1)) SubStr(result, 2)
+	}
+
 	/* =========================
 	 * [For development]
 	 * Functions below this are used for other functions in this library and may be meaningless in actual use.
@@ -441,6 +490,11 @@ class EveryHangul
 		engDoubleFinalArr := ["rt", "sw", "sg", "fr", "fa", "fq", "ft", "fx", "fv", "fg", "qt"]
 
 		pronounceFinalArr := ["ㄱ", "ㄱ", "ㄱ", "ㄴ", "ㄴ", "ㄴ", "ㄷ", "ㄹ", "ㄱ", "ㅁ", "ㄹ", "ㄹ", "ㄹ", "ㅍ", "ㄹ", "ㅁ", "ㅂ", "ㅂ", "ㄷ", "ㄷ", "ㅇ", "ㄷ", "ㄷ", "ㄱ", "ㄷ", "ㅂ", "ㄷ"]
+
+		romFirstArr := ["g", "gg", "n", "d", "dd", "r", "m", "b", "bb", "s", "ss", "", "j", "jj", "ch", "k", "t", "p", "h"]
+		romMiddleArr := ["a", "ae", "ya", "yae", "eo", "e", "yeo", "ye", "o", "wa", "wae", "oe", "yo", "u", "wo", "we", "wi", "yu", "eu", "ui", "i"]
+		romFinalArr := ["k", "ㄲ", "ㄳ", "n", "ㄵ", "ㄶ", "t", "l", "ㄺ", "ㄻ", "ㄼ", "ㄽ", "ㄾ", "ㄿ", "ㅀ", "m", "p", "ㅄ", "ㅅ", "ㅆ", "ng", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"]
+		;Final consonants are pronounce only ㄱㄴㄷㄹㅁㅂㅇ(k n t l m p ng)
 
 		/* =========================
 		 * SplitIfDoubleFinal(_input)
@@ -942,6 +996,7 @@ class EveryHangul
 				if (Ord(char) < Ord("가") || Ord(char) > Ord("힣"))
 				{
 					result .= char
+					prevFinal := ""
 					continue
 				}
 				charNum := this.GetCharNum(char)
